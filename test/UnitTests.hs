@@ -62,7 +62,7 @@ testLock = check "lock"
     do
         pob1 <- activateContractWallet w1 contract'
         void $ Emulator.waitNSlots 2
-        callEndpoint @"lock" pob1 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 50_000_000)
+        callEndpoint @"lock" pob1 (walletPubKeyHash w2, Ada.lovelaceValueOf 50_000_000)
         void $ Emulator.waitNSlots 2
     -- TODO It seems that `redeem` must filed (or output some warning message).
     --      So implement it and check then
@@ -79,13 +79,13 @@ testLockTwoTimes = check "lock"
     do
         pob1 <- activateContractWallet w1 contract'
         void $ Emulator.waitNSlots 2
-        callEndpoint @"lock" pob1 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 20_000_000)
+        callEndpoint @"lock" pob1 (walletPubKeyHash w2, Ada.lovelaceValueOf 20_000_000)
         void $ Emulator.waitNSlots 2
         pob2 <- activateContractWallet w1 contract'
         void $ Emulator.waitNSlots 2
-        callEndpoint @"lock" pob2 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 30_000_000)
+        callEndpoint @"lock" pob2 (walletPubKeyHash w2, Ada.lovelaceValueOf 30_000_000)
         -- TODO don't work with `pob1`
-        -- callEndpoint @"lock" pob1 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 30_000_000)
+        -- callEndpoint @"lock" pob1 (walletPubKeyHash w2, Ada.lovelaceValueOf 30_000_000)
         void $ Emulator.waitNSlots 2
 
 
@@ -118,7 +118,7 @@ testLockAndRedeem1 = check "lock and redeem 1"
     do
         pob1 <- activateContractWallet w1 contract'
         void $ Emulator.waitNSlots 2
-        callEndpoint @"lock" pob1 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 50_000_000)
+        callEndpoint @"lock" pob1 (walletPubKeyHash w2, Ada.lovelaceValueOf 50_000_000)
         void $ Emulator.waitNSlots 2
         pob2 <- activateContractWallet w2 contract'
         void $ Emulator.waitNSlots 2
@@ -140,10 +140,10 @@ testLockAndRedeem2 = check "lock and redeem 2"
         pob3 <- activateContractWallet w1 contract'
         void $ Emulator.waitNSlots 2
         --
-        callEndpoint @"lock" pob1 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 50_000_000)
+        callEndpoint @"lock" pob1 (walletPubKeyHash w2, Ada.lovelaceValueOf 50_000_000)
         void $ Emulator.waitNSlots 2
         --
-        callEndpoint @"lock" pob2 (pubKeyHash $ walletPubKey w1, Ada.lovelaceValueOf 50_000_000)
+        callEndpoint @"lock" pob2 (walletPubKeyHash w1, Ada.lovelaceValueOf 50_000_000)
         void $ Emulator.waitNSlots 2
         --
         callEndpoint @"redeem" pob3 ()
@@ -161,7 +161,7 @@ testLockAndRedeemOurselves = check "lock and redeem ourselves"
         h1 <- activateContractWallet w1 contract'
         void $ Emulator.waitNSlots 2
         --
-        callEndpoint @"lock" h1 (pubKeyHash $ walletPubKey w1, Ada.lovelaceValueOf 50_000_000)
+        callEndpoint @"lock" h1 (walletPubKeyHash w1, Ada.lovelaceValueOf 50_000_000)
         void $ Emulator.waitNSlots 5
         --
         callEndpoint @"redeem" h1 ()
@@ -177,10 +177,10 @@ testLockTwiceAndRedeem  = check "lock twice and redeem"
     do
         pob1 <- activateContractWallet w1 contract'
         void $ Emulator.waitNSlots 2
-        callEndpoint @"lock" pob1 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 20_000_000)
+        callEndpoint @"lock" pob1 (walletPubKeyHash w2, Ada.lovelaceValueOf 20_000_000)
         void $ Emulator.waitNSlots 2
         -- Repeat `lock` on same contract
-        callEndpoint @"lock" pob1 (pubKeyHash $ walletPubKey w2, Ada.lovelaceValueOf 30_000_000)
+        callEndpoint @"lock" pob1 (walletPubKeyHash w2, Ada.lovelaceValueOf 30_000_000)
         void $ Emulator.waitNSlots 2
         pob3 <- activateContractWallet w2 contract'
         void $ Emulator.waitNSlots 2
@@ -228,9 +228,9 @@ testBurnAndBurnedTrace2 = check "burn and burnedTrace 2"
         --
         --      But in which form? In which encoding??
         --
-        --      Script can't find `getPubKeyHash $ pubKeyHash $ walletPubKey w3` 
+        --      Script can't find `getPubKeyHash $ walletPubKeyHash w3` 
         --
-        let burnedAddr = getPubKeyHash $ pubKeyHash $ walletPubKey w3
+        let burnedAddr = getPubKeyHash $ walletPubKeyHash w3
         --Debug.Trace.traceM "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         --Debug.Trace.traceShowM burnedAddr
         --Debug.Trace.traceM (Prelude.show w3)
@@ -265,9 +265,9 @@ testBurnBurnedTraceAndRedeem = check "burn, burnedTrace and redeem"
         --
         --      But in which form? In which encoding??
         --
-        --      Script can't find `getPubKeyHash $ pubKeyHash $ walletPubKey w3` 
+        --      Script can't find `getPubKeyHash $ walletPubKeyHash w3` 
         --
-        let burnedAddr = getPubKeyHash $ pubKeyHash $ walletPubKey w3
+        let burnedAddr = getPubKeyHash $ walletPubKeyHash w3
         --Debug.Trace.traceM "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
         --Debug.Trace.traceShowM burnedAddr
         --Debug.Trace.traceM (Prelude.show w3)

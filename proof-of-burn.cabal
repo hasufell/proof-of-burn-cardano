@@ -61,7 +61,7 @@ executable generate-burn-address
                       , bytestring
                       , cardano-ledger-core
                       , cardano-crypto-class
-                      , shelley-spec-ledger
+                      , cardano-ledger-shelley
                       , cardano-binary
                       , text
                       , unix

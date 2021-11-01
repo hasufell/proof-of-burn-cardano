@@ -97,7 +97,7 @@ instance ContractModel POBModel where
     perform h ms cmd = do
         let slot = ms ^. Plutus.Contract.Test.ContractModel.currentSlot
         case cmd of
-            (Lock   wFrom wTo v) -> callEndpoint @"lock"   (h $ POBKey wFrom slot) (pubKeyHash $ walletPubKey wTo, Ada.lovelaceValueOf v) >> delay 1
+            (Lock   wFrom wTo v) -> callEndpoint @"lock"   (h $ POBKey wFrom slot) (walletPubKeyHash wTo, Ada.lovelaceValueOf v) >> delay 1
             (Redeem       wTo)   -> 
                 -- TODO here it is need to catch and process error from endpoint
                 callEndpoint @"redeem" (h $ POBKey wTo slot)   () >> delay 1
